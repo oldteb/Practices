@@ -1,0 +1,16 @@
+import java.net.*;
+import java.io.*;
+import javax.swing.*;
+
+public class UserList {
+	public static final int MAX_USER_NUMBER = 20;
+	public UserInfo[] userInfo; 
+	private int count = 0;
+	
+	public UserList(){
+		userInfo = new UserInfo[MAX_USER_NUMBER];
+	}
+	
+	public void add
+	
+}

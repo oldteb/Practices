@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "综合实验（题目4）全国交通咨询模拟", "综合实验（题目4）全国交通咨询模拟\综合实验（题目4）全国交通咨询模拟.vcproj", "{61EC1449-5A80-428A-B9F4-EE395C7F4B72}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{61EC1449-5A80-428A-B9F4-EE395C7F4B72}.Debug|Win32.ActiveCfg = Debug|Win32
+		{61EC1449-5A80-428A-B9F4-EE395C7F4B72}.Debug|Win32.Build.0 = Debug|Win32
+		{61EC1449-5A80-428A-B9F4-EE395C7F4B72}.Release|Win32.ActiveCfg = Release|Win32
+		{61EC1449-5A80-428A-B9F4-EE395C7F4B72}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

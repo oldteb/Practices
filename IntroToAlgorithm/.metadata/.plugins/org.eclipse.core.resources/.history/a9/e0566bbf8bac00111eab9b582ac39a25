@@ -1,0 +1,62 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.net.*;
+import java.io.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.border.*;
+
+
+public class ServerListenThread extends Thread{
+	ServerSocket server;
+	JTextArea textField;
+	//Socket clientSocket;
+	UserList userList;
+	UserInfo userInfo;
+	ObjectOutputStream output = null;
+	ObjectInputStream input = null;
+	
+	boolean isStop;
+	
+	//SeverReceiveThread recvThread;
+	
+	public ServerListenThread(
+			ServerSocket server,
+			JTextArea textField,
+			UserList userList){
+		this.server = server;
+		this.textField = textField;
+		this.userList = userList;
+		isStop = false;
+	}
+	
+	public void run(){
+		while(!isStop && !server.isClosed()){
+			try{
+				userInfo = new UserInfo(); 
+				userInfo.userSocket = new Socket();
+				userInfo.userSocket = server.accept();
+				//得到输入输出流
+				output = new ObjectOutputStream(userInfo.userSocket.getOutputStream());
+				input = new ObjectInputStream(userInfo.userSocket.getInputStream());
+				//读取用户名称
+				userInfo.setUserName((String)input.readObject());
+				//添加上线用户
+				userList.add(userInfo);
+				//显示信息
+				textField.append("user "+userInfo.getUserName()+" 上线了\n");
+				
+				//创建服务器接收线程(这里先写单线程通信)
+				output.writeObject("Hello "+userInfo.getUserName()+", you have entered the chatroom successfully!\n");
+				output.flush();
+				while(true){
+					textField.setText((String)input.readObject());
+				}
+				
+
+			}catch(Exception exc){
+				//
+			}
+		}
+	}
+}

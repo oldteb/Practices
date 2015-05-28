@@ -1,0 +1,135 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.net.*;
+import java.io.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.border.*;
+
+
+
+public class ServerDemo extends JFrame{
+	UserList userList = new UserList();
+	public static final int frameWidth = 600;
+	public static final int frameHeight = 500;
+	private JButton send = new JButton("发送");
+	private JButton start = new JButton("开启");
+	private JButton stop = new JButton("关闭");
+	private JLabel lable1 = new JLabel("消息编辑:");
+	private JComboBox combobox = new JComboBox();
+	private JTextArea msgSendField = new JTextArea();
+	private JTextArea textField = new JTextArea(30,30);  //swing构件
+	private EtchedBorder etched = new EtchedBorder(EtchedBorder.LOWERED);
+	private TitledBorder titled = new TitledBorder(etched,"用户信息");
+	private JPanel title1 = new JPanel();
+	private ServerListenThread listenThread;
+	
+	ServerSocket serverSocket;
+	//ServerListenThread listenThread;
+	
+	
+	public ServerDemo(String str){
+		setTitle(str);   //设置标题
+		//取消布局管理
+		Container c = getContentPane();
+		c.setLayout(null);
+		
+		//设置控件属性
+		send.setBorder(etched);
+		start.setBorder(etched);
+		stop.setBorder(etched);
+		stop.setEnabled(false);
+		combobox.insertItemAt("all", 0);
+		textField.setEditable(false);
+		textField.setBorder(etched);
+		msgSendField.setBorder(etched);
+		title1.setBorder(titled);
+		
+		
+		//设置控件大小及位置
+		send.setBounds(480, 420, 100, 30);
+		start.setBounds(360, 420, 100, 30);
+		stop.setBounds(240, 420, 100, 30);
+		combobox.setBounds(20,170,155, 280);
+		msgSendField.setBounds(210, 340, 370,70);
+		textField.setBounds(210,40,370,280);
+		title1.setBounds(10, 10, 180, 450);
+		lable1.setBounds(210, 10, 80, 30);
+
+		
+		
+		//设置事件函数
+		send.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae){
+				//sendMsg();
+			}
+		});
+		start.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae){
+				startServ();
+			}
+		});
+		stop.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae){
+				stopServ();
+			}
+		});
+		addWindowListener(new WindowAdapter(){
+			public void windowClosing(WindowEvent we){
+				System.exit(0);
+			}
+		});
+		//添加控件
+		c.add(send,null);
+		c.add(combobox,null);
+		c.add(msgSendField,null);
+		c.add(textField,null);
+		c.add(title1,null);
+		c.add(lable1,null);
+		c.add(start,null);
+		c.add(stop,null);
+		
+		setSize(frameWidth,frameHeight);
+		this.setResizable(false);
+		setVisible(true);
+	}
+	//开启服务器
+	public void startServ(){
+		try{
+			serverSocket = new ServerSocket(8000,10);
+			textField.append("server start at 8000 port...\n");
+			
+			start.setEnabled(false);
+			stop.setEnabled(true);
+			
+		}catch(Exception exc){
+			
+		}
+		//创建服务器监听线程
+		listenThread = new ServerListenThread(
+				serverSocket,
+				combobox,
+				textField,
+				userList);
+		
+	}
+	//关闭服务器
+	public void stopServ(){
+		try{
+			serverSocket.close();
+			textField.append("Server has been closed...\n");
+			start.setEnabled(true);
+			stop.setEnabled(false);
+			
+		}catch(Exception exc){
+			
+		}
+		//创建服务器监听线程
+		/*listenThread = new ServerListenThread(
+				serverSocket,
+				combobox,
+				textField);
+		*/
+	}
+	
+}

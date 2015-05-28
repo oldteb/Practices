@@ -1,0 +1,6 @@
+#Sat May 26 15:38:05 CST 2012
+ColorsAndFontsPreferencePage.expandedCategories=Torg.eclipse.ui.workbenchMisc
+org.eclipse.jface.dialogfont=1|\u5FAE\u8F6F\u96C5\u9ED1|12.0|0|WINDOWS|1|-16|0|0|0|400|0|0|0|-122|3|2|1|34|\u5FAE\u8F6F\u96C5\u9ED1;
+org.eclipse.jface.textfont=1|Consolas|14.25|0|WINDOWS|1|-19|0|0|0|400|0|0|0|0|3|2|1|49|Consolas;
+eclipse.preferences.version=1
+ColorsAndFontsPreferencePage.selectedElement=Forg.eclipse.jface.textfont

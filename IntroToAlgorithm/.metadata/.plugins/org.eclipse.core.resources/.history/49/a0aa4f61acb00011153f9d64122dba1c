@@ -1,0 +1,146 @@
+import java.net.*;
+import java.io.*;
+import javax.swing.*;
+
+
+
+public class ServerListenThread extends Thread{
+	ServerSocket server;
+	AutoText textField;
+	DefaultListModel data;
+	//Socket clientSocket;
+	UserList userList;
+	UserInfo userInfo;
+	ObjectOutputStream output = null;
+	ObjectInputStream input = null;
+	String recvMsg;
+	JTextField textField1;
+	UserInfo p;
+	
+	BufferedReader read1;
+	String s;
+	
+	boolean isStop;
+	
+	//SeverReceiveThread recvThread;
+	
+	public ServerListenThread(
+			ServerSocket server,
+			AutoText textField,
+			UserList userList,
+			DefaultListModel data,
+			JTextField textField1){
+		this.server = server;
+		this.textField = textField;
+		this.userList = userList;
+		this.data = data;
+		this.textField1 = textField1;
+		isStop = false;
+	}
+	
+	public void run(){
+		String chkCmd = new String();
+		BufferedWriter write1;
+		String username;
+		String password;
+		while(!isStop && !server.isClosed()){
+			try{
+				userInfo = new UserInfo(); 
+				userInfo.userSocket = new Socket();
+				userInfo.userSocket = server.accept();
+				//得到输入输出流
+				output = new ObjectOutputStream(userInfo.userSocket.getOutputStream());
+				input = new ObjectInputStream(userInfo.userSocket.getInputStream());
+				
+				chkCmd = (String)input.readObject();
+				//判断是否为注册消息
+				if(chkCmd.equalsIgnoreCase("用户注册")){
+					write1 = new BufferedWriter(new FileWriter("user.txt"));
+					write1.write((String)input.readObject());
+					write1.newLine();
+					write1.write((String)input.readObject());
+					output.writeObject("注册成功");
+					output.flush();
+				}
+				else if(chkCmd.equalsIgnoreCase("用户登录")){
+					
+				}
+				
+				
+				
+				//判断是否是注册用户
+				userInfo.setUserName((String)input.readObject());	
+				if ((new File("user.txt")).exists()){
+					read1 = new BufferedReader(new FileReader("user.txt"));
+				    while ((s = read1.readLine()) != null)
+				    {
+				        if(userInfo.getUserName().equals(s)){
+				        	break;        //是注册用户
+				        }
+				    }
+				    if(s == null){
+				    	//为非注册用户
+				    	output.writeObject("无效用户");
+				    	userInfo.userSocket.close();
+				    	output.close();
+				    	input.close();
+				    	read1.close();
+				    	userInfo = null;
+				    	continue;
+				    }
+				    read1.close();
+				}
+				
+				
+				//填写userInfo
+				//userInfo.setUserName((String)input.readObject());
+				userInfo.output = output;
+				userInfo.input = input;
+				//更新在线列表
+				for(p=userList.root.next;p!=null;p=p.next){
+					p.output.writeObject("用户上线");
+					p.output.flush();
+					p.output.writeObject(userInfo.getUserName());
+					p.output.flush();
+				}
+				//添加上线用户
+				userList.addUserInfo(userInfo);
+				//int count = userList.getCount();
+				//显示信息
+				textField.autoAppend("user "+userInfo.getUserName()+" 上线了\n");
+				data.addElement(userInfo.getUserName());
+				textField1.setText("在线:"+userList.getCount());
+				
+				/*
+				//创建服务器接收线程(这里先写单线程通信)
+				output.writeObject("Hello "+userInfo.getUserName()+", you have entered the chatroom successfully!\n");
+				output.flush();
+				while(true){
+					recvMsg = (String)input.readObject();
+					textField.append(userInfo.getUserName()+" 说:\n");
+					textField.append(recvMsg);
+					output.writeObject("系统信息");
+					output.flush();
+					output.writeObject("cao\n");
+					output.flush();	
+				}*/
+				
+				
+				//创建服务器接收线程（多线程）
+				output.writeObject("Hello "+userInfo.getUserName()+", you have entered the chatroom successfully!\n");
+				output.flush();
+				output.writeObject(data);
+				output.flush();
+				ServerReceiveThread recvThread = new ServerReceiveThread(
+						userInfo,
+						userList,
+						textField,
+						data,
+						textField1);
+				recvThread.start();	
+			}catch(Exception exc){
+				//
+			}
+		}
+	}
+}

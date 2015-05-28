@@ -1,0 +1,15 @@
+import java.net.*;
+import java.io.*;
+
+
+public class UserInfo {
+	private String userName;
+	
+	public UserInfo(String userName){
+		this.userName = userName;
+	}
+	public String getUserName(){
+		return userName;
+	}
+
+}

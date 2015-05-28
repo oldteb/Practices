@@ -1,0 +1,30 @@
+# Project: random project
+# Makefile created by Dev-C++ 4.9.9.2
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = 
+OBJ  = test1.o $(RES)
+LINKOBJ  = test1.o $(RES)
+LIBS =  -L"D:/工具/DEV-CPP/lib"  
+INCS =  -I"D:/工具/DEV-CPP/include" 
+CXXINCS =  -I"D:/工具/DEV-CPP/lib/gcc/mingw32/3.4.2/include"  -I"D:/工具/DEV-CPP/include/c++/3.4.2/backward"  -I"D:/工具/DEV-CPP/include/c++/3.4.2/mingw32"  -I"D:/工具/DEV-CPP/include/c++/3.4.2"  -I"D:/工具/DEV-CPP/include" 
+BIN  = "random project.exe"
+CXXFLAGS = $(CXXINCS)  
+CFLAGS = $(INCS)  
+RM = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before "random project.exe" all-after
+
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CC) $(LINKOBJ) -o "random project.exe" $(LIBS)
+
+test1.o: test1.c
+	$(CC) -c test1.c -o test1.o $(CFLAGS)
